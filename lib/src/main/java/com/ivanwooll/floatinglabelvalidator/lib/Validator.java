@@ -19,6 +19,8 @@ class Validator {
             MyApplication.resources.getString(R.string.email_error_message);
     private static final String PHONE_ERROR_MESSAGE =
             MyApplication.resources.getString(R.string.phone_error_message);
+    private static final String POSTAL_CODE_ERROR_MESSAGE =
+            MyApplication.resources.getString(R.string.postal_code_error_message);
     private static final String MUST_NOT_BE_EMPTY =
             MyApplication.resources.getString(R.string.must_not_be_empty);
 
@@ -60,6 +62,8 @@ class Validator {
             case Constants.PHONE:
                 result += validatePhoneNO();
                 break;
+            case Constants.POSTAL_CODE:
+                result += validatePostalCode();
             default:
                 break;
         }
@@ -119,6 +123,14 @@ class Validator {
         }
     }
 
+    private String validatePostalCode() {
+        for (char c : mChars) {
+            if (!Character.isLetter(c) && !Character.isWhitespace(c) && c != '-') {
+                return POSTAL_CODE_ERROR_MESSAGE;
+            }
+        }
+        return "";
+    }
 
     private boolean isValidEmail(CharSequence target) {
         return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
@@ -133,9 +145,4 @@ class Validator {
         str = String.valueOf(s);
         return str;
     }
-
-    int getValidatorType() {
-        return this.mValidatorType;
-    }
-
 }

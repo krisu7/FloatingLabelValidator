@@ -7,4 +7,5 @@
     <string name="numeric_error_message">powinien zawierać tylko liczby</string>
     <string name="phone_error_message">nie jest prawidłowym numerem telefonu</string>
     <string name="must_not_be_empty">" nie może być puste"</string>
+    <string name="postal_code_error_message">nie jest prawidłowym kodem pocztowym</string>
 </resources>

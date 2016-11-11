@@ -10,7 +10,7 @@
             <enum name="alphaNumeric" value="2" />
             <enum name="email" value="3" />
             <enum name="phone" value="4" />
+            <enum name="postalCode" value="5" />
         </attr>
-        <attr name="textSize" format="integer" />
     </declare-styleable>
 </resources>

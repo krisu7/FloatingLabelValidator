@@ -10,4 +10,5 @@ class Constants {
     static final int ALPHA_NUMERIC = 2;
     static final int EMAIL = 3;
     static final int PHONE = 4;
+    static final int POSTAL_CODE = 5;
 }

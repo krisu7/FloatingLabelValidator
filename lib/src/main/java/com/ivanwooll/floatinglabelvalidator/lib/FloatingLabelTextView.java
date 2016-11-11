@@ -23,6 +23,7 @@ public class FloatingLabelTextView extends FrameLayout implements TextWatcher, V
     private TextInputLayout mTextViewHintTop;
     private String mValidationMessage;
     private String mHintText;
+    private String mCountryCode;
     private boolean mAllowEmpty;
     private int mValidatorType;
     private Validator mValidator;
@@ -59,7 +60,7 @@ public class FloatingLabelTextView extends FrameLayout implements TextWatcher, V
         mEditText.addTextChangedListener(this);
         mTextViewHintTop.setHint(mHintText);
         mValidator = new Validator(mAllowEmpty, mValidatorType);
-        switch (mValidator.getValidatorType()) {
+        switch (mValidatorType) {
             case Constants.ALPHA:
                 mEditText.setInputType(InputType.TYPE_CLASS_TEXT);
                 break;
@@ -76,6 +77,9 @@ public class FloatingLabelTextView extends FrameLayout implements TextWatcher, V
             case Constants.PHONE:
                 mEditText.setInputType(InputType.TYPE_CLASS_PHONE);
                 break;
+            case Constants.POSTAL_CODE:
+                mEditText.setInputType(InputType.TYPE_CLASS_TEXT
+                        | InputType.TYPE_TEXT_VARIATION_POSTAL_ADDRESS);
             default:
                 break;
         }
