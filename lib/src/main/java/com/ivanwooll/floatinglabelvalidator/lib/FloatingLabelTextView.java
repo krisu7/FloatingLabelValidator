@@ -2,32 +2,32 @@ package com.ivanwooll.floatinglabelvalidator.lib;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 
 /**
  * Created by Ivan on 15/03/2015.
+ *
+ * Edited by Krzysztof on 11/11/2016.
  */
+
 public class FloatingLabelTextView extends FrameLayout implements TextWatcher, View.OnFocusChangeListener {
-    private EditText mEditText;
-    private TextView mTextViewHintTop;
+    private TextInputEditText mEditText;
+    private TextInputLayout mTextViewHintTop;
     private String mValidationMessage;
     private String mHintText;
     private boolean mAllowEmpty;
     private int mValidatorType;
     private Validator mValidator;
     private boolean mIsEmpty;
-    private int mMainTextSize;
     private boolean mIsValid;
-
-    private int red;
-    private int green;
 
     public FloatingLabelTextView(Context context) {
         super(context);
@@ -41,7 +41,6 @@ public class FloatingLabelTextView extends FrameLayout implements TextWatcher, V
             mHintText = a.getString(R.styleable.FloatingLabelTextView_hint);
             mAllowEmpty = a.getBoolean(R.styleable.FloatingLabelTextView_allowEmpty, true);
             mValidatorType = a.getInt(R.styleable.FloatingLabelTextView_validatorType, -1);
-            mMainTextSize = a.getInt(R.styleable.FloatingLabelTextView_textSize, 18);
         } finally {
             a.recycle();
         }
@@ -55,24 +54,38 @@ public class FloatingLabelTextView extends FrameLayout implements TextWatcher, V
 
     private void init() {
         inflate(getContext(), R.layout.floating_label_text_view, this);
-        mTextViewHintTop = (TextView) findViewById(R.id.textViewHintTop);
-        mEditText = (EditText) findViewById(R.id.editText);
-        mEditText.setTextSize((float) mMainTextSize);
+        mTextViewHintTop = (TextInputLayout) findViewById(R.id.textViewHintTop);
+        mEditText = (TextInputEditText) findViewById(R.id.editText);
         mEditText.addTextChangedListener(this);
-        mTextViewHintTop.setTextSize(mMainTextSize * .7f);
-        mTextViewHintTop.setText(mHintText);
-        red = getResources().getColor(android.R.color.holo_red_light);
-        green = getResources().getColor(android.R.color.holo_green_light);
+        mTextViewHintTop.setHint(mHintText);
         mValidator = new Validator(mAllowEmpty, mValidatorType);
+        switch (mValidator.getValidatorType()) {
+            case Constants.ALPHA:
+                mEditText.setInputType(InputType.TYPE_CLASS_TEXT);
+                break;
+            case Constants.NUMERIC:
+                mEditText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                break;
+            case Constants.ALPHA_NUMERIC:
+                mEditText.setInputType(InputType.TYPE_CLASS_TEXT);
+                break;
+            case Constants.EMAIL:
+                mEditText.setInputType(InputType.TYPE_CLASS_TEXT
+                        | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+                break;
+            case Constants.PHONE:
+                mEditText.setInputType(InputType.TYPE_CLASS_PHONE);
+                break;
+            default:
+                break;
+        }
 
-        mTextViewHintTop.setY(70);
         mEditText.setOnFocusChangeListener(this);
         mIsEmpty = true;
     }
 
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
     }
 
     @Override
@@ -80,29 +93,26 @@ public class FloatingLabelTextView extends FrameLayout implements TextWatcher, V
         mIsEmpty = s.length() < 1;
         mValidationMessage = mValidator.validate(s);
         mIsValid = TextUtils.isEmpty(mValidationMessage);
-        mTextViewHintTop.setTextColor(mIsValid ? green : red);
-        mTextViewHintTop.setText(mIsValid ? mHintText + "" : mHintText + " - " + mValidationMessage);
+        mTextViewHintTop.setHintTextAppearance(mIsValid ? R.style.TextAppearance_AppCompat_TextTrue
+                : R.style.TextAppearance_AppCompat_TextFalse);
+        mTextViewHintTop.setHint(mIsValid ? mHintText + "" : mHintText + " - " + mValidationMessage);
     }
 
     @Override
     public void afterTextChanged(Editable s) {
-
     }
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
-        if (hasFocus) {
-            mTextViewHintTop.animate().translationY(0);
-        } else {
-            if (mIsEmpty) {
-                mTextViewHintTop.animate().translationY(70);
-            }
-
-        }
     }
 
     public Editable getText() {
         return mEditText.getText();
+    }
+
+    public void setText(String text) {
+        mTextViewHintTop.animate().translationY(0);
+        mEditText.setText(text);
     }
 
     public boolean isValid() {

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">lib</string>
+    <string name="alpha_error_message">powinien zawierać tylko litery</string>
+    <string name="alpha_numeric_error_message">powinien zawierać tylko litery i liczby</string>
+    <string name="email_error_message">nie jest prawidłowym adresem email</string>
+    <string name="numeric_error_message">powinien zawierać tylko liczby</string>
+    <string name="phone_error_message">nie jest prawidłowym numerem telefonu</string>
+    <string name="must_not_be_empty">" nie może być puste"</string>
+</resources>

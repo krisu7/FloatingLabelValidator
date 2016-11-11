@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Lib</string>
+    <string name="alpha_error_message">should only contain letters</string>
+    <string name="numeric_error_message">should only contain numbers</string>
+    <string name="alpha_numeric_error_message">should only contain letters or numbers</string>
+    <string name="email_error_message">is not a valid email address</string>
+    <string name="phone_error_message">is not a valid phone number</string>
+    <string name="must_not_be_empty">" must not be empty"</string>
 </resources>

@@ -3,20 +3,24 @@ package com.ivanwooll.floatinglabelvalidator.lib;
 import android.text.TextUtils;
 
 /**
- * Created by ivanwooll on 28/03/15.
+ * Created by Ivan on 15/03/2015.
+ *
+ * Edited by Krzysztof on 11/11/2016.
  */
-public class Validator {
-    public static final int ALPHA = 0;
-    public static final int NUMERIC = 1;
-    public static final int ALPHA_NUMERIC = 2;
-    public static final int EMAIL = 3;
-    public static final int PHONE = 4;
 
-    private static final String ALPHA_ERROR_MESSAGE = "should only contain letters";
-    private static final String NUMERIC_ERROR_MESSAGE = "should only contain numbers";
-    private static final String ALPHA_NUMERIC_ERROR_MESSAGE = "should only contain letters or numbers";
-    private static final String EMAIL_ERROR_MESSAGE = "is not a valid email address";
-    private static final String PHONE_ERROR_MESSAGE = "is not a valid phone number";
+class Validator {
+    private static final String ALPHA_ERROR_MESSAGE =
+            MyApplication.resources.getString(R.string.alpha_error_message);
+    private static final String NUMERIC_ERROR_MESSAGE =
+            MyApplication.resources.getString(R.string.numeric_error_message);
+    private static final String ALPHA_NUMERIC_ERROR_MESSAGE =
+            MyApplication.resources.getString(R.string.alpha_numeric_error_message);
+    private static final String EMAIL_ERROR_MESSAGE =
+            MyApplication.resources.getString(R.string.email_error_message);
+    private static final String PHONE_ERROR_MESSAGE =
+            MyApplication.resources.getString(R.string.phone_error_message);
+    private static final String MUST_NOT_BE_EMPTY =
+            MyApplication.resources.getString(R.string.must_not_be_empty);
 
     private boolean mAllowEmpty;
     private int mValidatorType;
@@ -24,12 +28,12 @@ public class Validator {
     private char[] mChars;
     private CharSequence mCharSequence;
 
-    public Validator(boolean allowEmpty, int validatorType) {
+    Validator(boolean allowEmpty, int validatorType) {
         this.mAllowEmpty = allowEmpty;
         this.mValidatorType = validatorType;
     }
 
-    public String validate(CharSequence s) {
+    String validate(CharSequence s) {
         mCharSequence = s;
         String result = "";
         mString = stringFromCharSequence(s);
@@ -38,22 +42,22 @@ public class Validator {
             return "";
         }
         if (mString.length() < 1) {
-            return " must not be empty";
+            return MUST_NOT_BE_EMPTY;
         }
         switch (mValidatorType) {
-            case ALPHA:
+            case Constants.ALPHA:
                 result += validateAlpha();
                 break;
-            case NUMERIC:
+            case Constants.NUMERIC:
                 result += validateNumeric();
                 break;
-            case ALPHA_NUMERIC:
+            case Constants.ALPHA_NUMERIC:
                 result += validateAlphaNumeric();
                 break;
-            case EMAIL:
+            case Constants.EMAIL:
                 result += validateEmail();
                 break;
-            case PHONE:
+            case Constants.PHONE:
                 result += validatePhoneNO();
                 break;
             default:
@@ -68,13 +72,13 @@ public class Validator {
         if (mString.length() > 0) {
             return "";
         } else {
-            return " must not be empty";
+            return MUST_NOT_BE_EMPTY;
         }
     }
 
     private String validateAlpha() {
         for (char c : mChars) {
-            if (!Character.isLetter(c)) {
+            if (!Character.isLetter(c) && !Character.isWhitespace(c)) {
                 return ALPHA_ERROR_MESSAGE;
             }
         }
@@ -92,7 +96,7 @@ public class Validator {
 
     private String validateAlphaNumeric() {
         for (char c : mChars) {
-            if (!Character.isLetterOrDigit(c)) {
+            if (!Character.isLetterOrDigit(c) && !Character.isWhitespace(c)) {
                 return ALPHA_NUMERIC_ERROR_MESSAGE;
             }
         }
@@ -117,27 +121,21 @@ public class Validator {
 
 
     private boolean isValidEmail(CharSequence target) {
-        if (TextUtils.isEmpty(target)) {
-            return false;
-        } else {
-            return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
-        }
+        return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
 
     private boolean isValidPhoneNo(CharSequence target) {
-        if (TextUtils.isEmpty(target)) {
-            return false;
-        } else {
-            return android.util.Patterns.PHONE.matcher(target).matches();
-        }
+        return !TextUtils.isEmpty(target) && android.util.Patterns.PHONE.matcher(target).matches();
     }
 
     private String stringFromCharSequence(CharSequence s) {
         String str;
-        final StringBuilder sb = new StringBuilder(s.length());
-        sb.append(s);
-        str = sb.toString();
+        str = String.valueOf(s);
         return str;
+    }
+
+    int getValidatorType() {
+        return this.mValidatorType;
     }
 
 }
