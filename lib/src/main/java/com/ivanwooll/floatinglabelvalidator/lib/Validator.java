@@ -100,7 +100,7 @@ class Validator {
 
     private String validateAlphaNumeric() {
         for (char c : mChars) {
-            if (!Character.isLetterOrDigit(c) && !Character.isWhitespace(c)) {
+            if (!Character.isLetterOrDigit(c) && !Character.isWhitespace(c) && c !='/') {
                 return ALPHA_NUMERIC_ERROR_MESSAGE;
             }
         }
