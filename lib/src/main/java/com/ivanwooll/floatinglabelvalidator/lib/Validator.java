@@ -125,7 +125,7 @@ class Validator {
 
     private String validatePostalCode() {
         for (char c : mChars) {
-            if (!Character.isLetter(c) && !Character.isWhitespace(c) && c != '-') {
+            if (!Character.isDigit(c) && c != '-') {
                 return POSTAL_CODE_ERROR_MESSAGE;
             }
         }
